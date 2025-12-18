@@ -6,19 +6,25 @@
 #include <stdexcept>
 #include <type_traits>
 #include <string>
+#include <typeindex>
+#include <unordered_map>
 
 inline std::string getTypeName(const std::type_info& type) {
-    if (type == typeid(int)) return "int";
-    if (type == typeid(double)) return "double";
-    if (type == typeid(float)) return "float";
-    if (type == typeid(bool)) return "bool";
-    if (type == typeid(char)) return "char";
-    if (type == typeid(std::string)) return "string";
-    if (type == typeid(long)) return "long";
-    if (type == typeid(short)) return "short";
-    if (type == typeid(unsigned int)) return "unsigned int";
-    if (type == typeid(long long)) return "long long";
-    return type.name();
+    static const std::unordered_map<std::type_index, std::string> typeNames = {
+        {typeid(int), "int"},
+        {typeid(double), "double"},
+        {typeid(float), "float"},
+        {typeid(bool), "bool"},
+        {typeid(char), "char"},
+        {typeid(std::string), "string"},
+        {typeid(long), "long"},
+        {typeid(short), "short"},
+        {typeid(unsigned int), "unsigned int"},
+        {typeid(long long), "long long"}
+    };
+    
+    auto it = typeNames.find(std::type_index(type));
+    return it != typeNames.end() ? it->second : type.name();
 }
 
 template<typename ClassType, typename RetType, typename... ParamTypes>

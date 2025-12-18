@@ -105,10 +105,8 @@ static bool testVoidFunction() {
         );
         dispatcher.registerCommand(&printCmd, "print");
         
-        // Void-функция должна выполняться без ошибок
         auto result = dispatcher.execute("print", {{"a", 15}, {"b", 25}});
         
-        // Для void-функций возвращается пустой any
         assert(!result.has_value());
         std::cout << "Void function executed successfully" << std::endl;
         
@@ -131,7 +129,6 @@ static bool testErrorHandling() {
         );
         dispatcher.registerCommand(&addCmd, "sum");
         
-        // Тест 1: Неправильное имя команды
         try {
             dispatcher.execute("unknown_command", {{"arg1", 1}, {"arg2", 2}});
             return false;
@@ -139,7 +136,6 @@ static bool testErrorHandling() {
             std::cout << "Expected error (unknown command): " << e.what() << std::endl;
         }
         
-        // Тест 2: Неправильный тип аргумента
         try {
             dispatcher.execute("sum", {{"arg1", 1}, {"arg2", std::string("wrong")}});
             return false;
@@ -147,7 +143,6 @@ static bool testErrorHandling() {
             std::cout << "Expected error (wrong type): " << e.what() << std::endl;
         }
         
-        // Тест 3: Отсутствующий аргумент
         try {
             dispatcher.execute("sum", {{"arg1", 1}});
             return false;
@@ -174,10 +169,8 @@ static bool testMultithreading() {
         );
         dispatcher.registerCommand(&addCmd, "sum");
         
-        // Проверяем, что команда зарегистрирована
         assert(dispatcher.hasCommand("sum"));
         
-        // Проверяем удаление команды
         assert(dispatcher.unregisterCommand("sum"));
         assert(!dispatcher.hasCommand("sum"));
         
